@@ -28,11 +28,21 @@ jobs:
           post-emulator-launch-assemble-command: ./gradlew compileFullDebugUnitTestSources compileFullDebugAndroidTestSources
           test-command: ./gradlew connectedFullDebugAndroidTest
 
+      - run:
+          name: Collect mem usage
+          command: cat /sys/fs/cgroup/memory/memory.max_usage_in_bytes
+          when: always
+
       - android/run-tests:
           test-command: ./gradlew testFullDebugUnitTest
 
       - android/run-tests:
           test-command: ./gradlew --stacktrace jacocoAllDebugReport
+
+      - run:
+          name: Collect mem usage
+          command: cat /sys/fs/cgroup/memory/memory.max_usage_in_bytes
+          when: always
 
       - run:
           name: Save test results
